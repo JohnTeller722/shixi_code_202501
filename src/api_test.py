@@ -7,10 +7,10 @@ client = OpenAI(
 
 # comprehensive_1.txt
 # detailed_1.txt
-with open('ztl/data/test_data_QA_split/system_question/detailed_1.txt', 'r') as f:
+with open('data/test_data_QA_split/system_question/comprehensive_1.txt', 'r') as f:
     system = f.read()
 
-with open('ztl/data/test_data_QA_split/user.txt', 'r') as f:
+with open('data/test_data_QA_split/user_examples/user.txt', 'r') as f:
     user = f.read()
 
 response = client.chat.completions.create(
