@@ -42,7 +42,16 @@ def workflow(context: str, llm: LLM) -> List[Dict]:
     logging.info("Loading prompts...")
     question_comprehensive_prompt = load_prompt("data/test_data_QA_split/system_question/comprehensive_1.txt")
     question_detailed_prompt = load_prompt("data/test_data_QA_split/system_question/detailed_1.txt")
-    answer_prompt = load_prompt("data/test_data_QA_split/system_answer/version_1.txt")
+    answer_prompt_markdown = load_prompt("data/test_data_QA_split/system_answer/version_markdown_1.txt")
+    answer_prompt_text = load_prompt("data/test_data_QA_split/system_answer/version_text_1.txt")
+
+    # Load prefix_suffix
+    total_data = []
+    with open("data/test_data_QA_split/prefix_suffix.json", 'r') as f:
+        total_data = json.load(f)
+    
+    prefix = total_data["prefix"]
+    suffix = total_data["suffix"]
     
     # Generate comprehensive questions
     logging.info("Generating comprehensive questions...")
@@ -65,7 +74,11 @@ def workflow(context: str, llm: LLM) -> List[Dict]:
     logging.info(f"Generated {len(detailed_questions)} detailed questions")
     
     # Combine all questions
-    all_questions = comprehensive_questions + detailed_questions
+    all_questions_raw = comprehensive_questions + detailed_questions
+    all_questions = []
+    for i in range(len(suffix)):
+        for question in all_questions_raw:
+            all_questions.append(question + suffix[i])
     logging.info(f"Total questions generated: {len(all_questions)}")
     
     # Generate answers for each question
@@ -77,6 +90,12 @@ def workflow(context: str, llm: LLM) -> List[Dict]:
         # Format prompt with context and question
         user_prompt = prompt_template(context, question)
         
+        # format route
+        if "markdown" in question:
+            answer_prompt = answer_prompt_markdown
+        else:
+            answer_prompt = answer_prompt_text
+
         # Get answer from LLM
         answer_response = llm.llm_chat("Qwen2.5-72B", [
             {"role": "system", "content": answer_prompt},
@@ -116,6 +135,13 @@ def find_first_valid_position(text: str, markers: List[str]) -> int:
     valid_positions = [pos for pos in positions if pos != -1]
     return min(valid_positions) if valid_positions else -1
 
+def prompt_template(context: str, question: str) -> str:
+    """Format prompt template with context and question"""
+    return f"""
+    文本: {context}
+    问题: {question}
+    """
+
 def extract_answer(text: str) -> Tuple[str, str]:
     """Extract answer and reference from LLM response"""
     # Define markers
@@ -141,13 +167,6 @@ def extract_answer(text: str) -> Tuple[str, str]:
     reference = text[reference_start:].strip()
     
     return answer, reference
-
-def prompt_template(context: str, question: str) -> str:
-    """Format prompt template with context and question"""
-    return f"""
-    文本: {context}
-    问题: {question}
-    """
 
 if __name__ == "__main__":
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
