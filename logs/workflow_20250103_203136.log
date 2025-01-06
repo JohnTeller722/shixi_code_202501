@@ -1,0 +1,39 @@
+2025-01-03 20:31:36,438 - INFO - Starting Q&A generation workflow
+2025-01-03 20:31:36,439 - INFO - Context length: 804 characters
+2025-01-03 20:31:36,439 - INFO - Loading prompts...
+2025-01-03 20:31:36,439 - INFO - Generating comprehensive questions...
+2025-01-03 20:32:08,167 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:32:08,176 - INFO - Generated 4 comprehensive questions
+2025-01-03 20:32:08,176 - INFO - Generating detailed questions...
+2025-01-03 20:32:39,716 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:32:39,718 - INFO - Generated 9 detailed questions
+2025-01-03 20:32:39,718 - INFO - Total questions generated: 13
+2025-01-03 20:32:39,718 - INFO - Generating answers...
+2025-01-03 20:32:39,718 - INFO - Processing question 1/13
+2025-01-03 20:33:22,865 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:33:22,866 - INFO - Processing question 2/13
+2025-01-03 20:33:56,788 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:33:56,789 - INFO - Processing question 3/13
+2025-01-03 20:34:22,028 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:34:22,030 - INFO - Processing question 4/13
+2025-01-03 20:34:46,842 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:34:46,843 - INFO - Processing question 5/13
+2025-01-03 20:34:54,933 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:34:54,935 - INFO - Processing question 6/13
+2025-01-03 20:35:02,970 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:35:02,971 - INFO - Processing question 7/13
+2025-01-03 20:35:10,227 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:35:10,228 - INFO - Processing question 8/13
+2025-01-03 20:35:13,930 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:35:13,931 - INFO - Processing question 9/13
+2025-01-03 20:35:34,539 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:35:34,540 - INFO - Processing question 10/13
+2025-01-03 20:35:49,188 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:35:49,190 - INFO - Processing question 11/13
+2025-01-03 20:36:01,294 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:36:01,296 - INFO - Processing question 12/13
+2025-01-03 20:36:23,299 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:36:23,301 - INFO - Processing question 13/13
+2025-01-03 20:36:33,576 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-03 20:36:33,579 - INFO - Q&A generation workflow completed successfully
+2025-01-03 20:36:33,580 - INFO - Successfully wrote QA pairs to output/qa_pairs_20250103_203136.json
