@@ -1,0 +1,5 @@
+2025-01-06 21:12:26,512 - INFO - Starting Q&A generation workflow
+2025-01-06 21:12:57,212 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:12:57,221 - INFO - Generated 4 questions for format 1
+2025-01-06 21:13:33,004 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:13:33,006 - INFO - Generated 4 questions for format 2

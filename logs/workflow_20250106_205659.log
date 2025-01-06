@@ -1,0 +1,17 @@
+2025-01-06 20:56:59,592 - INFO - Starting Q&A generation workflow
+2025-01-06 20:57:22,368 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:57:52,863 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:57:52,865 - INFO - Generated 11 questions
+2025-01-06 20:58:29,190 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:58:48,862 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:59:18,444 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:59:41,822 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:59:50,246 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 20:59:57,961 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:00:03,625 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:00:23,642 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:00:39,548 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:01:01,997 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:01:18,899 - INFO - HTTP Request: POST http://127.0.0.1:1025/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-06 21:01:18,901 - INFO - Q&A generation workflow completed successfully
+2025-01-06 21:01:18,902 - INFO - Successfully wrote QA pairs to output/qa_pairs_20250106_205659.json

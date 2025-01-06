@@ -5,7 +5,6 @@ from src.tools.llms import LLM
 from src.tools.prompts import load_prompt
 from typing import List, Tuple, Dict
 import logging
-from src.gen_QA_workflow.components import LLMGenerator, Mediator0, Mediator1
 
 def setup_logging(timestamp: str):
     """设置日志配置"""
@@ -29,45 +28,88 @@ def save_intermediate_output(content: str, filename: str):
     with open(f"intermediate/{filename}", 'w', encoding='utf-8') as f:
         f.write(content)
 
-def workflow(context: str, base_url: str, api_key: str) -> List[Dict]:
+def workflow(context: str, llm: LLM) -> List[Dict]:
     """
-    执行完整的QA生成工作流
+    Execute the full Q&A generation workflow.
     """
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     setup_logging(timestamp)
     
     logging.info("Starting Q&A generation workflow")
+    logging.info(f"Context length: {len(context)} characters")
     
-    # 初始化组件
-    generator = LLMGenerator(base_url=base_url, api_key=api_key)
-    mediator0 = Mediator0()
-    mediator1 = Mediator1()
+    # Load prompts
+    logging.info("Loading prompts...")
+    question_comprehensive_prompt = load_prompt("data/test_data_QA_split/system_question/comprehensive_1.txt")
+    question_detailed_prompt = load_prompt("data/test_data_QA_split/system_question/detailed_1.txt")
+    answer_prompt_markdown = load_prompt("data/test_data_QA_split/system_answer/version_markdown_1.txt")
+    answer_prompt_text = load_prompt("data/test_data_QA_split/system_answer/version_text_1.txt")
+
+    # Load prefix_suffix
+    total_data = []
+    with open("data/test_data_QA_split/prefix_suffix.json", 'r') as f:
+        total_data = json.load(f)
     
-    # 生成问题
-    questions = []
-    mediator0_outputs = mediator0.process(context)
+    prefix = total_data["prefix"]
+    suffix = total_data["suffix"]
     
-    for i, output in enumerate(mediator0_outputs):
-        response = generator.generate(output.messages, output.config)
-        save_intermediate_output(response, f"questions_{i}_{timestamp}.txt")
-        extracted_questions = extract_question(response)
-        questions.extend(extracted_questions)
-        logging.info(f"Generated {len(extracted_questions)} questions for format {i+1}")
+    # Generate comprehensive questions
+    logging.info("Generating comprehensive questions...")
+    comp_response = llm.llm_chat("Qwen2.5-72B", [
+        {"role": "system", "content": question_comprehensive_prompt},
+        {"role": "user", "content": context}
+    ])
+    save_intermediate_output(comp_response, f"comprehensive_questions_{timestamp}.txt")
+    comprehensive_questions = extract_question(comp_response)
+    logging.info(f"Generated {len(comprehensive_questions)} comprehensive questions")
     
-    logging.info(f"Total generated questions: {len(questions)}")
+    # Generate detailed questions
+    logging.info("Generating detailed questions...")
+    detail_response = llm.llm_chat("Qwen2.5-72B", [
+        {"role": "system", "content": question_detailed_prompt},
+        {"role": "user", "content": context}
+    ])
+    save_intermediate_output(detail_response, f"detailed_questions_{timestamp}.txt")
+    detailed_questions = extract_question(detail_response)
+    logging.info(f"Generated {len(detailed_questions)} detailed questions")
     
-    # 生成答案
+    # Combine all questions
+    all_questions_raw = comprehensive_questions + detailed_questions
+    all_questions = []
+    for i in range(len(suffix)):
+        for question in all_questions_raw:
+            all_questions.append(question + suffix[i])
+    logging.info(f"Total questions generated: {len(all_questions)}")
+    
+    # Generate answers for each question
     qa_pairs = []
-    for question in questions:
-        mediator1_output = mediator1.process(context, question)
-        response = generator.generate(mediator1_output.messages, mediator1_output.config)
+    logging.info("Generating answers...")
+    for i, question in enumerate(all_questions, 1):
+        logging.info(f"Processing question {i}/{len(all_questions)}")
         
+        # Format prompt with context and question
+        user_prompt = prompt_template(context, question)
+        
+        # format route
+        if "markdown" in question:
+            answer_prompt = answer_prompt_markdown
+        else:
+            answer_prompt = answer_prompt_text
+
+        # Get answer from LLM
+        answer_response = llm.llm_chat("Qwen2.5-72B", [
+            {"role": "system", "content": answer_prompt},
+            {"role": "user", "content": user_prompt}
+        ])
         save_intermediate_output(
-            response,
-            f"answer_{timestamp}.txt"
+            answer_response, 
+            f"answer_q{i}_{timestamp}.txt"
         )
         
-        answer, reference = extract_answer(response)
+        # Extract answer and reference
+        answer, reference = extract_answer(answer_response)
+        
+        # Add to results
         qa_pairs.append({
             "context": context,
             "question": question,
@@ -134,7 +176,7 @@ if __name__ == "__main__":
     
     # Example usage
     context = load_prompt("data/test_data_QA_split/user_examples/user.txt")
-    qa_pairs = workflow(context, llm.base_url, llm.api_key)
+    qa_pairs = workflow(context, llm)
     
     # 创建output目录
     output_dir = "output"
